@@ -7,7 +7,9 @@ export function SearchButton() {
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSearchQuery(event.target.value)
     }
-    const handleSeekClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleSeekClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        const response = await window.system.toSeek(searchQuery)
+        console.log(response)
         console.log("clicked")
     }
     return (

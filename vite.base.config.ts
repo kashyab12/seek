@@ -1,7 +1,8 @@
 import { builtinModules } from 'node:module';
 import type { AddressInfo } from 'node:net';
-import type { ConfigEnv, Plugin, UserConfig } from 'vite';
+import { defineConfig, type ConfigEnv, type Plugin, type UserConfig } from 'vite';
 import pkg from './package.json';
+import path from "path"
 
 export const builtins = ['electron', ...builtinModules.map((m) => [m, `node:${m}`]).flat()];
 
@@ -91,3 +92,12 @@ export function pluginHotRestart(command: 'reload' | 'restart'): Plugin {
     },
   };
 }
+
+export default defineConfig({
+  resolve: {
+    // Load the Node.js entry.
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    }
+  },
+})

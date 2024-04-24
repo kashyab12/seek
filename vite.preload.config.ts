@@ -1,6 +1,8 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig, mergeConfig } from 'vite';
 import { getBuildConfig, external, pluginHotRestart } from './vite.base.config';
+import react from "@vitejs/plugin-react"
+import path from "path"
 
 // https://vitejs.dev/config
 export default defineConfig((env) => {
@@ -22,7 +24,13 @@ export default defineConfig((env) => {
         },
       },
     },
-    plugins: [pluginHotRestart('reload')],
+    plugins: [pluginHotRestart('reload'), react()],
+    resolve: {
+      // Load the Node.js entry.
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      }
+    },
   };
 
   return mergeConfig(getBuildConfig(forgeEnv), config);

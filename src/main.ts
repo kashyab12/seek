@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme, ipcMain, Tray, nativeImage } from 'electron';
+import { app, BrowserWindow, nativeTheme, ipcMain, Tray, nativeImage, utilityProcess, shell } from 'electron';
 import path from 'path';
 
 let tray: Electron.Tray | undefined
@@ -41,6 +41,7 @@ app.on('ready', () => {
   createWindow()
   ipcMain.handle("toSeek", (event: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
     console.log(`[${event.processId}] sent ${searchQuery}`)
+    shell.openExternal(`https://www.google.com/search?q=${searchQuery}`)
     return `[${event.processId}] sent ${searchQuery}`
   })
   ipcMain.handle('dark-mode:system', () => {

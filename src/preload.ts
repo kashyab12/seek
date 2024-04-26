@@ -3,6 +3,10 @@
 
 import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld('system', {
+const electronHandler = {
     toSeek: (searchQuery: string) => ipcRenderer.invoke('toSeek', [searchQuery])
-})
+}
+
+contextBridge.exposeInMainWorld('electronHandler', electronHandler)
+
+export type ElectronHandler = typeof electronHandler

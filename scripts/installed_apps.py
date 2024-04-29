@@ -1,3 +1,4 @@
+from thefuzz import process, fuzz
 import subprocess
 import shlex
 import argparse
@@ -18,4 +19,6 @@ if not installed_apps_cmd.stderr in [None, ""]:
 installed_apps = [app for app in installed_apps_cmd.stdout.split("\n") if app]
 
 # fuzzy search on this list
-
+sim_sorted_apps = process.extract(args.search_query, installed_apps)
+for app, score in sim_sorted_apps:
+    print(f"{app}: {score}")

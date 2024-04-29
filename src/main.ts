@@ -1,4 +1,5 @@
 import { app, BrowserWindow, nativeTheme, ipcMain, Tray, nativeImage, utilityProcess, shell } from 'electron';
+import {spawn} from "child_process"
 import path from 'path';
 
 let tray: Electron.Tray | undefined
@@ -11,11 +12,11 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 600,
-    height: 50,
+    width: 800,
+    height: 400,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegrationInWorker: true,
+      nodeIntegration: true,
       defaultFontSize: 24
     },
     frame: false,
@@ -29,7 +30,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 
@@ -40,8 +41,16 @@ const createWindow = () => {
 app.on('ready', () => {
   createWindow()
   ipcMain.handle("toSeek", (event: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
+    let searchResults: String[] = []
     console.log(`[${event.processId}] sent ${searchQuery}`)
-    shell.openExternal(`https://www.google.com/search?q=${searchQuery}`)
+    // shell.openExternal(`https://www.google.com/search?q=${searchQuery}`)\
+
+    const child = spawn("python", [path.join(app.getAppPath(), "scripts", "installed_apps.py"), searchQuery])
+    child.stdout.setEncoding("utf8")
+    child.stdout.on('data', (data) => {
+      searchResults.push(data)
+      console.log(data)
+    })
     return `[${event.processId}] sent ${searchQuery}`
   })
   ipcMain.handle('dark-mode:system', () => {

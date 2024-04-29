@@ -30,7 +30,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {

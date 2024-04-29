@@ -36,8 +36,8 @@ const createWindow = () => {
 const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
   return new Promise((resolve, reject) => {
     // todo: use safeStorage to encrypt/decrypt
-    let searchResults: String = ""
-    let searchError: String = ""
+    let searchResults: string = ""
+    let searchError: string = ""
     // shell.openExternal(`https://www.google.com/search?q=${searchQuery}`)\
     const child = spawn("python", [path.join(app.getAppPath(), "scripts", "installed_apps.py"), searchQuery])
     child.stdout.setEncoding("utf8")

@@ -1,5 +1,5 @@
 import { app, BrowserWindow, nativeTheme, ipcMain, Tray, nativeImage, utilityProcess, shell } from 'electron';
-import {spawn} from "child_process"
+import { spawn } from "child_process"
 import path from 'path';
 
 let tray: Electron.Tray | undefined
@@ -30,29 +30,41 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
-
+const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
+  return new Promise((resolve, reject) => {
+    // todo: use safeStorage to encrypt/decrypt
+    let searchResults: String = ""
+    let searchError: String = ""
+    // shell.openExternal(`https://www.google.com/search?q=${searchQuery}`)\
+    const child = spawn("python", [path.join(app.getAppPath(), "scripts", "installed_apps.py"), searchQuery])
+    child.stdout.setEncoding("utf8")
+    child.stderr.setEncoding("utf8")
+    child.stdout.on('data', (data) => {
+      searchResults += data
+    })
+    child.stdout.on('close', () => {
+      resolve(searchResults)
+    })
+    child.stderr.on("data", (data) => {
+      searchError += data
+    })
+    child.stderr.on('close', () =>  {
+      if (searchError) {
+        return reject(searchError)
+      }
+    })
+  })
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  ipcMain.handle("toSeek", (event: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
-    let searchResults: String[] = []
-    console.log(`[${event.processId}] sent ${searchQuery}`)
-    // shell.openExternal(`https://www.google.com/search?q=${searchQuery}`)\
 
-    const child = spawn("python", [path.join(app.getAppPath(), "scripts", "installed_apps.py"), searchQuery])
-    child.stdout.setEncoding("utf8")
-    child.stdout.on('data', (data) => {
-      searchResults.push(data)
-      console.log(data)
-    })
-    return `[${event.processId}] sent ${searchQuery}`
-  })
   ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system'
   })
@@ -68,6 +80,8 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+ipcMain.handle("toSeek", toSeekHandler)
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-type ResultsStateCtx = {
+interface ResultsStateCtx {
     searchResults: string[][];
     setSearchResults: React.Dispatch<React.SetStateAction<string[][]>>;
 }

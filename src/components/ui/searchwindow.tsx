@@ -10,7 +10,7 @@ export function SearchWindow() {
             <div className="grid w-full gap-2">
                 <SearchButton />
                 {
-                    searchResults.length == 5 &&
+                    searchResults.length > 1 &&
                     <SearchResults />
                 }
             </div>

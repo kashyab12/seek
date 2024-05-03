@@ -41,6 +41,7 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
     const child = spawn("python", [path.join(app.getAppPath(), "scripts", "installed_apps.py"), searchQuery])
     child.stdout.setEncoding("utf8")
     child.stderr.setEncoding("utf8")
+    // todo: not sure these listeners are correct, need to correct this to correctly handle this promise
     child.stdout.on('data', (data) => {
       searchResults += data
     })
@@ -50,18 +51,31 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
     child.stderr.on("data", (data) => {
       searchError += data
     })
-    child.stderr.on('close', () =>  {
+    child.stderr.on('close', () => {
       if (searchError) {
-        return reject(searchError)
+        reject(searchError)
       }
     })
   })
 }
 
-const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [app]: string) => {
-    shell.openExternal(`file://${app}`)
-    // todo: no point returning?
-    return true
+const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [searchResult]: string) => {
+  return new Promise((resolve, reject) => {
+    let searchError = ""
+    // todo: use safeStorage to encrypt/decrypt
+    const child = spawn("python", [path.join(app.getAppPath(), "scripts", "open_app.py"), searchResult])
+    child.stderr.setEncoding("utf8")
+    child.stderr.on('data', (data) => {
+      searchError += data
+    })
+    child.stderr.on('close', () => {
+      if (searchError) {
+        shell.openExternal(`file://${searchResult}`)
+      } else {
+        resolve(true)
+      }
+    })
+  })
 }
 
 // This method will be called when Electron has finished

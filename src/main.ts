@@ -13,7 +13,7 @@ const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 400,
+    height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
@@ -30,7 +30,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
@@ -38,7 +38,6 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
     // todo: use safeStorage to encrypt/decrypt
     let searchResults: string = ""
     let searchError: string = ""
-    // shell.openExternal(`https://www.google.com/search?q=${searchQuery}`)\
     const child = spawn("python", [path.join(app.getAppPath(), "scripts", "installed_apps.py"), searchQuery])
     child.stdout.setEncoding("utf8")
     child.stderr.setEncoding("utf8")
@@ -57,6 +56,12 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
       }
     })
   })
+}
+
+const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [app]: string) => {
+    shell.openExternal(`file://${app}`)
+    // todo: no point returning?
+    return true
 }
 
 // This method will be called when Electron has finished
@@ -82,6 +87,7 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.handle("toSeek", toSeekHandler)
+ipcMain.handle("openApp", openAppHandler)
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the

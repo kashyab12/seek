@@ -4,7 +4,8 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 const electronHandler = {
-    toSeek: (searchQuery: string) => ipcRenderer.invoke('toSeek', [searchQuery])
+    toSeek: (searchQuery: string) => ipcRenderer.invoke('toSeek', [searchQuery]),
+    openApp: (app: string) => ipcRenderer.invoke('openApp', [app])
 }
 
 contextBridge.exposeInMainWorld('electronHandler', electronHandler)

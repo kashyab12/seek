@@ -12,7 +12,7 @@ export function SearchResults() {
         searchResults.map((searchResultEntry: string[], index: number) => {
             const [searchResult, simScore] = searchResultEntry
             return (
-                <Button key={index} onClick={(event) => resultOnClick(event, searchResult)}>
+                <Button key={index} onClick={(event) => resultOnClick(event, searchResult)} size="sm">
                     {`${searchResult} - ${simScore}`}
                 </Button>
             )

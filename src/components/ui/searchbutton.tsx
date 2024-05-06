@@ -15,14 +15,13 @@ function splitResult(searchResults: string): string[][] {
 
 export function SearchButton() {
     const [searchQuery, setSearchQuery] = useState<string>("")
-    const {searchResults, setSearchResults} = useContext(SearchResultsCtx)
+    const { searchResults, setSearchResults } = useContext(SearchResultsCtx)
     const handleChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSearchQuery(event.target.value)
         const searchResult = await window.electronHandler.toSeek(searchQuery)
-        console.log(searchResult)
         setSearchResults(splitResult(searchResult))
     }
     return (
-        <Textarea placeholder="Search for apps" onChange={handleChange} value={searchQuery} rows={1} />
+        <Textarea autoFocus={true} placeholder="Search for apps" onChange={handleChange} value={searchQuery} rows={1} />
     )
 }

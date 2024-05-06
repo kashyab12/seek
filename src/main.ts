@@ -83,13 +83,21 @@ const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [searchResult]: st
 
 const regGlobKeybinds = () => {
   globalShortcut.register('Control+Return', () => {
-    appWindows.forEach(window =>  {
+    appWindows.forEach(window => {
       if (window.isVisible()) {
         window.hide()
       } else {
         window.show()
         window.focus()
       }
+    })
+  })
+}
+
+const regWindowEvents = () => {
+  appWindows.forEach(window => {
+    window.on('blur', () =>  {
+      window.hide()
     })
   })
 }
@@ -102,10 +110,11 @@ ipcMain.handle("openApp", openAppHandler)
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   appWindows.push(createWindow())
-  appWindows.forEach(window =>  {
+  appWindows.forEach(window => {
     window.hide()
   })
   regGlobKeybinds()
+  regWindowEvents()
   ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system'
   })

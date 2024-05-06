@@ -18,7 +18,7 @@ const createWindow = (): BrowserWindow => {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
-      defaultFontSize: 24
+      defaultFontSize: 22
     },
     frame: false,
     transparent: true,
@@ -31,7 +31,7 @@ const createWindow = (): BrowserWindow => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   return mainWindow
 };
 
@@ -81,6 +81,22 @@ const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [searchResult]: st
   })
 }
 
+const regGlobKeybinds = () => {
+  globalShortcut.register('Control+Return', () => {
+    appWindows.forEach(window =>  {
+      if (window.isVisible()) {
+        window.hide()
+      } else {
+        window.show()
+        window.focus()
+      }
+    })
+  })
+}
+
+ipcMain.handle("toSeek", toSeekHandler)
+ipcMain.handle("openApp", openAppHandler)
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -106,9 +122,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.handle("toSeek", toSeekHandler)
-ipcMain.handle("openApp", openAppHandler)
-
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -116,17 +129,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
-function regGlobKeybinds() {
-  globalShortcut.register('Control+Return', () => {
-    appWindows.forEach(window =>  {
-      if (window.isVisible()) {
-        window.hide()
-      } else {
-        window.show()
-      }
-    })
-  })
-}

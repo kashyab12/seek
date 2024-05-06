@@ -23,6 +23,6 @@ export function SearchButton() {
         setSearchResults(splitResult(searchResult))
     }
     return (
-        <Textarea placeholder="Search for apps" onChange={handleChange} value={searchQuery} />
+        <Textarea placeholder="Search for apps" onChange={handleChange} value={searchQuery} rows={1} />
     )
 }

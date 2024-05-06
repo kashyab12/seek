@@ -9,7 +9,9 @@ class DesktopAction:
         # Parse file
         desktop_file = DesktopFile.from_file(self.app_path)
         # todo: what's a more general solution? Find all and disp?
-        return list(find("Exec", desktop_file.__dict__))[0]
+        cmd = list(find("Exec", desktop_file.__dict__))[0]
+        print(cmd)
+        return cmd
         
 def find(key, value):
   for k, v in value.items():

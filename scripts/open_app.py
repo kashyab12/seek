@@ -9,8 +9,8 @@ parser = argparse.ArgumentParser("open_app")
 parser.add_argument("app_path", help="the app being opened", type=Path)
 args = parser.parse_args()
 
-action = DesktopAction(args.app_path)
-installed_apps_cmd = subprocess.run(shlex.split(action.get_exec()), capture_output=True, encoding='utf-8')
-
-if not installed_apps_cmd.stderr in [None, ""]:
-    raise FileNotFoundError(f"error while executing {args.app_path}: {installed_apps_cmd.stderr}")
+try:
+    execute_app = f"/usr/bin/{args.app_path}"
+    installed_apps_cmd = subprocess.run(shlex.split(execute_app), capture_output=True, encoding='utf-8', check=True)
+except subprocess.CalledProcessError as cpe:
+    raise cpe

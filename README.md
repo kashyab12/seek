@@ -8,4 +8,4 @@ todos
     - app name (to present the user with)
     - app exec path (to open it on click)
     - app icon
-- super nice keybinds to allow quick searching
+- return the app path and name, in case it isn't executable we can just open the folder?

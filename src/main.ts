@@ -1,15 +1,16 @@
-import { app, BrowserWindow, nativeTheme, ipcMain, Tray, nativeImage, utilityProcess, shell } from 'electron';
+import { app, BrowserWindow, nativeTheme, ipcMain, Tray, nativeImage, globalShortcut, shell } from 'electron';
 import { spawn } from "child_process"
 import path from 'path';
 
 let tray: Electron.Tray | undefined
+const appWindows: BrowserWindow[] = []
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const createWindow = () => {
+const createWindow = (): BrowserWindow => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
@@ -31,6 +32,7 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+  return mainWindow
 };
 
 const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
@@ -83,8 +85,11 @@ const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [searchResult]: st
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  createWindow()
-
+  appWindows.push(createWindow())
+  appWindows.forEach(window =>  {
+    window.hide()
+  })
+  regGlobKeybinds()
   ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system'
   })
@@ -114,3 +119,14 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+function regGlobKeybinds() {
+  globalShortcut.register('Control+Return', () => {
+    appWindows.forEach(window =>  {
+      if (window.isVisible()) {
+        window.hide()
+      } else {
+        window.show()
+      }
+    })
+  })
+}

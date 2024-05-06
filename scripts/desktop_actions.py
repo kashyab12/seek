@@ -8,11 +8,8 @@ class DesktopAction:
     def get_exec(self) -> Path:
         # Parse file
         desktop_file = DesktopFile.from_file(self.app_path)
-        # todo: what's a more general solution? Just find the 1st exec? Find all and disp?
-        if "google-chrome.desktop" in str(self.app_path):
-            return desktop_file.data["Desktop Action new-window"]['Exec']
-        else:
-            return list(find("Exec", desktop_file))[0]
+        # todo: what's a more general solution? Find all and disp?
+        return list(find("Exec", desktop_file.__dict__))[0]
         
 def find(key, value):
   for k, v in value.items():

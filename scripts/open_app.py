@@ -13,4 +13,4 @@ action = DesktopAction(args.app_path)
 installed_apps_cmd = subprocess.run(shlex.split(action.get_exec()), capture_output=True, encoding='utf-8')
 
 if not installed_apps_cmd.stderr in [None, ""]:
-    raise FileNotFoundError("not found any installed apps")
+    raise FileNotFoundError(f"error while executing {args.app_path}: {installed_apps_cmd.stderr}")

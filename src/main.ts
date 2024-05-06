@@ -71,6 +71,7 @@ const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [searchResult]: st
     child.stderr.on('close', () => {
       if (searchError) {
         shell.openExternal(`file://${searchResult}`)
+        reject(new Error(searchError))
       } else {
         resolve(true)
       }

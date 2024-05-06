@@ -12,4 +12,16 @@ class DesktopAction:
         if "google-chrome.desktop" in str(self.app_path):
             return desktop_file.data["Desktop Action new-window"]['Exec']
         else:
-            return desktop_file.data['Exec']
+            return list(find("Exec", desktop_file))[0]
+        
+def find(key, value):
+  for k, v in value.items():
+    if k == key:
+      yield v
+    elif isinstance(v, dict):
+      for result in find(key, v):
+        yield result
+    elif isinstance(v, list):
+      for d in v:
+        for result in find(key, d):
+          yield result

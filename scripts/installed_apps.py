@@ -1,4 +1,5 @@
 from thefuzz import process
+import base64
 import subprocess
 import shlex
 import argparse

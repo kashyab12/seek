@@ -10,9 +10,10 @@ export function SearchResults() {
     }
     return (
         searchResults.map((searchResultEntry: string[], index: number) => {
-            const [searchResult, simScore] = searchResultEntry
+            const [searchResult, simScore, appIcon] = searchResultEntry
             return (
                 <Button key={index} onClick={(event) => resultOnClick(event, searchResult)} size="sm">
+                    {appIcon && <img src={appIcon}/>}
                     {`${searchResult} - ${simScore}`}
                 </Button>
             )

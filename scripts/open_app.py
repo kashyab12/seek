@@ -2,6 +2,7 @@ import argparse
 import subprocess
 import shlex
 import json
+import os
 from desktop_actions import DesktopAction
 from pathlib import Path
 
@@ -21,6 +22,8 @@ if not apps[args.app_name]["exec"]:
 print(apps[args.app_name]["exec"])
 
 try:
-    installed_apps_cmd = subprocess.run(shlex.split(apps[args.app_name]["exec"]), capture_output=True, check=True, encoding='utf-8')
+    env_vars = os.environ.copy()
+    env_vars["GTK_PATH"] = ""
+    installed_apps_cmd = subprocess.run(shlex.split(apps[args.app_name]["exec"]), capture_output=True, check=True, encoding='utf-8', env=env_vars)
 except subprocess.CalledProcessError as cpe:
     raise cpe

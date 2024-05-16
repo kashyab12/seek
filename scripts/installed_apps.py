@@ -1,7 +1,6 @@
-from thefuzz import process
-import base64
 import subprocess
 import shlex
+import json
 import argparse
 
 def find_app_icon(app_desktop_path):
@@ -18,7 +17,7 @@ def find_app_icon(app_desktop_path):
 
 # check for cl args
 parser = argparse.ArgumentParser("installed_apps")
-parser.add_argument("search_query", help="the app being searched for", type=str)
+parser.add_argument("save_dir", help="where installed app info is serialized", type=str)
 args = parser.parse_args()
 
 # find_gui_apps = f"find {apps_dir} -name '*.desktop' -printf '%f\\n'"
@@ -33,18 +32,19 @@ unique_only = subprocess.run(shlex.split(unique_only_cmd), input=gui_apps.stdout
 if not unique_only.stderr in [None, ""]:
     raise FileNotFoundError("not found any installed apps")
 
-# store installed apps in list
+# store installed apps info
 apps_struct = {}
 for app_by_path in unique_only.stdout.split("\n"):
     if app_by_path:
         app, desktop_path = app_by_path.split(": ")
+        icon_paths = find_app_icon(desktop_path)
+        icon_choose = icon_paths.split("\n")[0] if icon_paths else ""
         apps_struct[app] = {
-            ".desktop": desktop_path
+            ".desktop": desktop_path,
+            "icon_path": icon_choose  
         }
 
-# todo: seperate this into it's own script
-sim_sorted_apps = process.extract(args.search_query, list(apps_struct.keys()))
-for app, score in sim_sorted_apps:
-    icon_paths = find_app_icon(apps_struct[app][".desktop"])
-    icon_choose = icon_paths.split("\n")[0] if icon_paths else ""
-    print(f"{app}: {score}; {icon_choose}")
+# serialize the info in the save_dir
+with open(f"{args.save_dir}{'/' if args.save_dir[-1] != '/' else ''}installed_apps.json", "w") as json_out:
+    json.dump(apps_struct, json_out, indent=4)
+

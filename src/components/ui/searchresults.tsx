@@ -13,7 +13,7 @@ export function SearchResults() {
             const [searchResult, simScore, appIcon] = searchResultEntry
             return (
                 <Button key={index} onClick={(event) => resultOnClick(event, searchResult)} size="sm">
-                    {appIcon && <img src={appIcon}/>}
+                    {appIcon && <img src={appIcon} width={32} height={32}/>}
                     {`${searchResult} - ${simScore}`}
                 </Button>
             )

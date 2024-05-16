@@ -60,7 +60,7 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
   if (searchError && !searchError.includes("score 0")) {
     throw new Error(`subprocess exited with error ${searchError}`)
   }
-  const resolveResult: Array<[string, string, string | void]> = []
+  const resolveResult: Array<[string, string, string]> = []
   for (const result of searchResults.split("\n")) {
     const [appName, simScore, imgPath] = result.split(/[\s:;]+/)
     if (imgPath) {

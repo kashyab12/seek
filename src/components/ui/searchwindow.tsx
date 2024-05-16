@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SearchButton } from "@/components/ui/searchbutton";
+import { SearchBar } from "@/components/ui/searchbar";
 import { SearchResultsCtx } from "@/components/ui/searchctx";
 import { SearchResults } from "@/components/ui/searchresults";
 
@@ -8,7 +8,7 @@ export function SearchWindow() {
     return (
         <SearchResultsCtx.Provider value={{ searchResults, setSearchResults }}>
             <div className="grid w-full gap-2">
-                <SearchButton />
+                <SearchBar />
                 {
                     searchResults.length > 1 &&
                     <SearchResults />

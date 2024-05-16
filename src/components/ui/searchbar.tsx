@@ -2,7 +2,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useContext, useState } from "react"
 import { SearchResultsCtx } from "@/components/ui/searchctx"
 
-export function SearchButton() {
+export function SearchBar() {
     const [searchQuery, setSearchQuery] = useState<string>("")
     const { searchResults, setSearchResults } = useContext(SearchResultsCtx)
     const handleChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {

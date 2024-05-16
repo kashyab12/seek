@@ -32,7 +32,7 @@ const createWindow = (): BrowserWindow => {
   }
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
   return mainWindow
 };
 
@@ -62,11 +62,13 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
   }
   const resolveResult: Array<[string, string, string]> = []
   for (const result of searchResults.split("\n")) {
+    if (!result) {
+      continue
+    }
     const [appName, simScore, imgPath] = result.split(/[\s:;]+/)
     if (imgPath) {
-      const imgData = await fs.readFile(imgPath, 'binary')
-      const b64Image = Buffer.from(imgData).toString('base64')
-      const b64Icon = `data:image/png;base64,${b64Image}`
+      const imgData = await fs.readFile(imgPath, {encoding: 'base64'})
+      const b64Icon = `data:image/png;base64,${imgData}`
       resolveResult.push([appName, simScore, b64Icon])
     } else {
       resolveResult.push([appName, simScore, ""])

@@ -8,4 +8,5 @@ todos
     - app name (to present the user with)
     - app exec path (to open it on click)
     - app icon
-- return the app path and name, in case it isn't executable we can just open the folder?a
+- return the app path and name, in case it isn't executable we can just open the folder?
+- the fuzzy matcher isn't great, chro yields chrome as an entry

@@ -86,7 +86,7 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
 const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [searchResult]: string) => {
   let searchError = ""
   // todo: use safeStorage to encrypt/decrypt
-  const child = spawn("python", [path.join(app.getAppPath(), "scripts", "open_app.py"), searchResult])
+  const child = spawn("python", [path.join(app.getAppPath(), "scripts", "open_app.py"), searchResult, `${app.getPath("appData")}/installed_apps.json`])
   child.stderr.setEncoding("utf8")
   for await (const chunk of child.stderr) {
     searchError += chunk

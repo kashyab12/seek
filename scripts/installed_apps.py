@@ -14,6 +14,16 @@ def find_app_icon(app_desktop_path):
         return app_icon_cmd_proc.stdout
     except subprocess.CalledProcessError as cep:
         return ""
+    
+def desktop_exec_cmd(app_desktop_path):
+    try:
+        grep_exec_cmds = f"grep Exec {app_desktop_path}"
+        grep_exec_proc = subprocess.run(shlex.split(grep_exec_cmds), capture_output=True, encoding='utf-8', check=True)
+        # this should likely be the desktop entry exec cmd
+        choose_first = grep_exec_proc.stdout.split("\n")[0].split("=")[-1]
+        return choose_first
+    except subprocess.CalledProcessError as cep:
+        return ""
 
 # check for cl args
 parser = argparse.ArgumentParser("installed_apps")
@@ -39,9 +49,11 @@ for app_by_path in unique_only.stdout.split("\n"):
         app, desktop_path = app_by_path.split(": ")
         icon_paths = find_app_icon(desktop_path)
         icon_choose = icon_paths.split("\n")[0] if icon_paths else ""
+        exec_cmd = desktop_exec_cmd(desktop_path)
         apps_struct[app] = {
             ".desktop": desktop_path,
-            "icon_path": icon_choose  
+            "icon_path": icon_choose,
+            "exec": exec_cmd
         }
 
 # serialize the info in the save_dir

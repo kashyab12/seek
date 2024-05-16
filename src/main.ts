@@ -1,6 +1,6 @@
 import { app, BrowserWindow, nativeTheme, ipcMain, Tray, nativeImage, globalShortcut, shell } from 'electron';
 import { spawn } from "child_process"
-import { readFile } from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 
 let tray: Electron.Tray | undefined
@@ -43,43 +43,33 @@ type SearchResult = {
 }
 
 const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
-  return new Promise((resolve, reject) => {
-    // todo: use safeStorage to encrypt/decrypt
-    let searchResults: string = ""
-    let searchError: string = ""
-    const child = spawn("python", [path.join(app.getAppPath(), "scripts", "installed_apps.py"), searchQuery])
-    child.stdout.setEncoding("utf8")
-    child.stderr.setEncoding("utf8")
-    // todo: not sure these listeners are correct, need to correct this to correctly handle this promise
-    child.stdout.on('data', (data) => {
-      searchResults += data
-    })
-    child.stdout.on('close', () => {
-      const resolveResult: Array<[string, string, string | void]> = []
-      searchResults.split("\n").forEach(async result =>  {
-        const [appName, scoreAndImg] = result.split(": ")
-        const [simScore, imgPath] = scoreAndImg.split("; ")
-        const b64Image = await readFile(imgPath, (err, imgData) =>  {
-          if (err){
-            console.log(err)
-            return ""
-          }
-          const b64Image = Buffer.from(imgData).toString('base64')
-          return `data:image/png;base64,${b64Image}`
-        })
-        resolveResult.push([appName, simScore, b64Image])
-      })
-      resolve(resolveResult)
-    })
-    child.stderr.on("data", (data) => {
-      searchError += data
-    })
-    child.stderr.on('close', () => {
-      if (searchError) {
-        reject(searchError)
-      }
-    })
-  })
+  // return new Promise((resolve, reject) => {
+  // todo: use safeStorage to encrypt/decrypt
+  const child = spawn("python", [path.join(app.getAppPath(), "scripts", "installed_apps.py"), searchQuery])
+  child.stdout.setEncoding("utf8")
+  child.stderr.setEncoding("utf8")
+  // todo: not sure these listeners are correct, need to correct this to correctly handle this promise
+  let searchResults: string = ""
+  for await (const chunk of child.stdout) {
+    searchResults += chunk
+  }
+  let searchError: string = ""
+  for await (const chunk of child.stderr) {
+    searchError += chunk
+  }
+  if (searchError && !searchError.includes("score 0")) {
+    throw new Error(`subprocess exited with error ${searchError}`)
+  }
+  const resolveResult: Array<[string, string, string | void]> = []
+  for (const result of searchResults.split("\n")) {
+    const [appName, scoreAndImg] = result.split(": ")
+    const [simScore, imgPath] = scoreAndImg.split("; ")
+    const imgData = await fs.readFile(imgPath, 'binary')
+    const b64Image = Buffer.from(imgData).toString('base64')
+    const b64Icon = `data:image/png;base64,${b64Image}`
+    resolveResult.push([appName, simScore, b64Icon])
+  }
+  return resolveResult
 }
 
 const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [searchResult]: string) => {

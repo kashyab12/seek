@@ -62,12 +62,15 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
   }
   const resolveResult: Array<[string, string, string | void]> = []
   for (const result of searchResults.split("\n")) {
-    const [appName, scoreAndImg] = result.split(": ")
-    const [simScore, imgPath] = scoreAndImg.split("; ")
-    const imgData = await fs.readFile(imgPath, 'binary')
-    const b64Image = Buffer.from(imgData).toString('base64')
-    const b64Icon = `data:image/png;base64,${b64Image}`
-    resolveResult.push([appName, simScore, b64Icon])
+    const [appName, simScore, imgPath] = result.split(/[\s:;]+/)
+    if (imgPath) {
+      const imgData = await fs.readFile(imgPath, 'binary')
+      const b64Image = Buffer.from(imgData).toString('base64')
+      const b64Icon = `data:image/png;base64,${b64Image}`
+      resolveResult.push([appName, simScore, b64Icon])
+    } else {
+      resolveResult.push([appName, simScore, ""])
+    }
   }
   return resolveResult
 }

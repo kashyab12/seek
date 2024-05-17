@@ -15,6 +15,7 @@ def find_app_icon(app_desktop_path):
     except subprocess.CalledProcessError as cep:
         return ""
     
+# command not being used, using gio launch instead to not have to worry about %u and %f cases (along with TryExec)
 def desktop_exec_cmd(app_desktop_path):
     try:
         grep_exec_cmds = f"grep Exec {app_desktop_path}"

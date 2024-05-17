@@ -16,14 +16,13 @@ args = parser.parse_args()
 with open(args.installed_apps, "r") as json_file:
     apps = json.load(json_file)
 
-if not apps[args.app_name]["exec"]:
-    raise ValueError("no exec value found!")
-
-print(apps[args.app_name]["exec"])
+# if not apps[args.app_name]["exec"]:
+#     raise ValueError("no exec value found!")
 
 try:
     env_vars = os.environ.copy()
     env_vars["GTK_PATH"] = ""
-    installed_apps_cmd = subprocess.run(shlex.split(apps[args.app_name]["exec"]), capture_output=True, check=True, encoding='utf-8', env=env_vars)
+    launch_app_cmd = f"gio launch {apps[args.app_name]['.desktop']}"
+    installed_apps_cmd = subprocess.run(shlex.split(launch_app_cmd), capture_output=True, check=True, encoding='utf-8', env=env_vars)
 except subprocess.CalledProcessError as cpe:
     raise cpe

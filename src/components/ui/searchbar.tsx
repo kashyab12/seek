@@ -7,8 +7,12 @@ export function SearchBar() {
     const { searchResults, setSearchResults } = useContext(SearchResultsCtx)
     const handleChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSearchQuery(event.target.value)
-        const searchResult = await window.electronHandler.toSeek(searchQuery)
-        setSearchResults(searchResult)
+        if (event.target.value) {
+            const searchResult = await window.electronHandler.toSeek(searchQuery)
+            setSearchResults(searchResult)
+        } else {
+            setSearchResults([])
+        }
     }
     return (
         <Textarea autoFocus={true} placeholder="Search for apps" onChange={handleChange} value={searchQuery} rows={1} />

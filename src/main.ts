@@ -36,7 +36,7 @@ const createWindow = (): BrowserWindow => {
   return mainWindow
 };
 
-const getInstalledApps = async () =>  {
+const getInstalledApps = async () => {
   const child = spawn("python", [path.join(app.getAppPath(), "scripts", "installed_apps.py"), app.getPath('appData')])
   child.stderr.setEncoding("utf8")
   let searchError: string = ""
@@ -49,7 +49,6 @@ const getInstalledApps = async () =>  {
 }
 
 const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
-  // return new Promise((resolve, reject) => {
   // todo: use safeStorage to encrypt/decrypt
   const child = spawn("python", [path.join(app.getAppPath(), "scripts", "scorer.py"), searchQuery, `${app.getPath('appData')}/installed_apps.json`])
   child.stdout.setEncoding("utf8")
@@ -73,8 +72,11 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
     }
     const [appName, simScore, imgPath] = result.split(/[\s:;]+/)
     if (imgPath) {
-      const imgData = await fs.readFile(imgPath, { encoding: 'base64' })
-      const b64Icon = `data:image/${imgPath.split(".").at(-1)};base64,${imgData}`
+      const imgData = await fs.readFile(imgPath)
+      const b64Data = Buffer.from(imgData).toString('base64')
+      const imgExt = imgPath.split(".").at(-1)
+      const mimeType = imgExt === "svg" ? "svg+xml": imgExt
+      const b64Icon = `data:image/${mimeType};base64,${b64Data}`
       resolveResult.push([appName, simScore, b64Icon])
     } else {
       resolveResult.push([appName, simScore, ""])

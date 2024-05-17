@@ -1,5 +1,5 @@
 <div style="text-align: center;">
-    <h2>bringing spotlight search to linux</h2>
+  <h2>bringing spotlight search to linux</h2>
   <img src="res/seek.png" alt="seek">
 </div>
 

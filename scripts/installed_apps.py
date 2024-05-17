@@ -21,7 +21,10 @@ def desktop_exec_cmd(app_desktop_path):
         grep_exec_proc = subprocess.run(shlex.split(grep_exec_cmds), capture_output=True, encoding='utf-8', check=True)
         # this should likely be the desktop entry exec cmd
         exec_cmds = grep_exec_proc.stdout.split("\n")
-        not_file_execs = [exec_cmd for exec_cmd in exec_cmds if "%u" not in exec_cmd.lower() and exec_cmd]
+        not_file_execs = []
+        for cmd in exec_cmds:
+            if cmd and not any(wildcard in cmd.lower() for wildcard in ["%u", "%f"]):
+                not_file_execs.append(cmd)
         if len(not_file_execs) == 0: return ""
         choose_first = not_file_execs[0].split("=")[-1]
         return choose_first

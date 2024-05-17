@@ -20,7 +20,10 @@ def desktop_exec_cmd(app_desktop_path):
         grep_exec_cmds = f"grep Exec {app_desktop_path}"
         grep_exec_proc = subprocess.run(shlex.split(grep_exec_cmds), capture_output=True, encoding='utf-8', check=True)
         # this should likely be the desktop entry exec cmd
-        choose_first = grep_exec_proc.stdout.split("\n")[0].split("=")[-1]
+        exec_cmds = grep_exec_proc.stdout.split("\n")
+        not_file_execs = [exec_cmd for exec_cmd in exec_cmds if "%u" not in exec_cmd.lower() and exec_cmd]
+        if len(not_file_execs) == 0: return ""
+        choose_first = not_file_execs[0].split("=")[-1]
         return choose_first
     except subprocess.CalledProcessError as cep:
         return ""

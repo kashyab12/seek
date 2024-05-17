@@ -6,7 +6,7 @@
 ---
 
 ### todos
-* navigate to results using arrow keys or nums?
+* navigate to results and set focus using arrow keys or nums?
 * the fuzzy matcher isn't great, "chro" yields chrome as an entry
 * make sure the searchresult key is not arr index.
 * local py server running listening to reqs from be?

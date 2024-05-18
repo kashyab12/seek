@@ -1,10 +1,13 @@
 import { Textarea } from "@/components/ui/textarea"
 import { useContext, useState } from "react"
-import { SearchResultsCtx } from "@/components/ui/searchctx"
+import { WindowCtx } from "@/components/ui/compctx"
 
 export function SearchBar() {
     const [searchQuery, setSearchQuery] = useState<string>("")
-    const { searchResults, setSearchResults } = useContext(SearchResultsCtx)
+    const {
+        searchResultCtx: { searchResults, setSearchResults },
+        focusCtx: { windowFocus, setWindowFocus }
+    } = useContext(WindowCtx)
     const handleChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSearchQuery(event.target.value)
         if (event.target.value) {
@@ -14,7 +17,14 @@ export function SearchBar() {
             setSearchResults([])
         }
     }
+    const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (searchResults.length > 0 && windowFocus === -1) {
+            if (event.key.toLowerCase() === "arrowdown") setWindowFocus(0)
+            else if (event.key.toLowerCase() === "arrowup") setWindowFocus(4)
+        }
+        console.log(event.key)
+    }
     return (
-        <Textarea autoFocus={true} placeholder="Search for apps" onChange={handleChange} value={searchQuery} rows={1} />
+        <Textarea autoFocus={true} placeholder="Search for apps" onChange={handleChange} onKeyDown={handleKeyDown} value={searchQuery} rows={1} />
     )
 }

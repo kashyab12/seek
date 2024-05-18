@@ -1,12 +1,23 @@
 import { useState } from "react";
 import { SearchBar } from "@/components/ui/searchbar";
-import { SearchResultsCtx } from "@/components/ui/searchctx";
+import { WindowCtx, WindowStateCtx } from "@/components/ui/compctx";
 import { SearchResults } from "@/components/ui/searchresults";
 
 export function SearchWindow() {
     const [searchResults, setSearchResults] = useState<string[][]>([])
+    const [windowFocus, setWindowFocus] = useState<number>(-1)
+    const windowStateCtx: WindowStateCtx = {
+        searchResultCtx: {
+            searchResults,
+            setSearchResults
+        },
+        focusCtx: {
+            windowFocus,
+            setWindowFocus
+        }
+    }
     return (
-        <SearchResultsCtx.Provider value={{ searchResults, setSearchResults }}>
+        <WindowCtx.Provider value={windowStateCtx}>
             <div className="grid w-full gap-2">
                 <SearchBar />
                 {
@@ -14,6 +25,6 @@ export function SearchWindow() {
                     <SearchResults />
                 }
             </div>
-        </SearchResultsCtx.Provider >
+        </WindowCtx.Provider >
     )
 }

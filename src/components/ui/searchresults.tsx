@@ -1,9 +1,12 @@
 import { useContext } from "react";
-import { SearchResultsCtx } from "@/components/ui/searchctx";
+import { WindowCtx } from "@/components/ui/compctx";
 import { Button } from "@/components/ui/button";
 
 export function SearchResults() {
-    const { searchResults } = useContext(SearchResultsCtx)
+    const {
+        searchResultCtx: { searchResults, setSearchResults },
+        focusCtx: { windowFocus, setWindowFocus }
+    } = useContext(WindowCtx)
     const resultOnClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, searchResult: string) => {
         const isOpenedApp = await window.electronHandler.openApp(searchResult)
         console.log(isOpenedApp)
@@ -13,7 +16,7 @@ export function SearchResults() {
             const [searchResult, simScore, appIcon] = searchResultEntry
             return (
                 <Button key={index} onClick={(event) => resultOnClick(event, searchResult)} size="sm">
-                    {appIcon && <img src={appIcon} width={32} height={32}/>}
+                    {appIcon && <img src={appIcon} width={32} height={32} />}
                     {`${searchResult} - ${simScore}`}
                 </Button>
             )

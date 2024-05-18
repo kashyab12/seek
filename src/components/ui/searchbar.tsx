@@ -1,8 +1,9 @@
 import { Textarea } from "@/components/ui/textarea"
-import { useContext, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import { WindowCtx } from "@/components/ui/compctx"
 
 export function SearchBar() {
+    const barFocus: React.MutableRefObject<HTMLTextAreaElement> = useRef()
     const [searchQuery, setSearchQuery] = useState<string>("")
     const {
         searchResultCtx: { searchResults, setSearchResults },
@@ -24,7 +25,8 @@ export function SearchBar() {
         }
         console.log(event.key)
     }
+
     return (
-        <Textarea autoFocus={true} placeholder="Search for apps" onChange={handleChange} onKeyDown={handleKeyDown} value={searchQuery} rows={1} />
+        <Textarea ref={barFocus} autoFocus={windowFocus === -1} placeholder="Search for apps" onChange={handleChange} onKeyDown={handleKeyDown} value={searchQuery} rows={1} />
     )
 }

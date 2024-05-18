@@ -1,6 +1,9 @@
 <div style="text-align: center;">
   <h2>bringing spotlight search to linux</h2>
-  <img src="res/seek.png" alt="seek">
+  <figure>
+    <img src="res/seek-demo-may18.gif" alt="seek">
+    <figcaption>captured may 18th</figcaption>
+  </figure>
 </div>
 
 ---

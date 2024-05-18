@@ -1,13 +1,15 @@
 import { createContext } from "react";
 
+export type Focus = -1 | 0 | 1 | 2 | 3 | 4
+
 interface ResultsStateCtx {
     searchResults: string[][];
     setSearchResults: React.Dispatch<React.SetStateAction<string[][]>>;
 }
 
-interface FocusStateCtx {
-    windowFocus: number;
-    setWindowFocus: React.Dispatch<React.SetStateAction<number>>;
+export interface FocusStateCtx {
+    windowFocus: Focus;
+    setWindowFocus: React.Dispatch<React.SetStateAction<Focus>>;
 }
 
 export interface WindowStateCtx {
@@ -19,11 +21,11 @@ export interface WindowStateCtx {
 export const WindowCtx = createContext<WindowStateCtx>({
     searchResultCtx: {
         searchResults: [],
-        setSearchResults: () => {}
+        setSearchResults: () => { }
     },
     focusCtx: {
         windowFocus: -1,
-        setWindowFocus: () => {}
+        setWindowFocus: () => { }
     }
 })
 

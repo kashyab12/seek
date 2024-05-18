@@ -19,11 +19,11 @@ export function SearchBar() {
         }
     }
     const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        console.log("bar key down")
         if (searchResults.length > 0 && windowFocus === -1) {
             if (event.key.toLowerCase() === "arrowdown") setWindowFocus(0)
             else if (event.key.toLowerCase() === "arrowup") setWindowFocus(4)
         }
-        console.log(event.key)
     }
 
     return (

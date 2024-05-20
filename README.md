@@ -5,6 +5,7 @@
 ---
 
 ### todos
+* just return all the installed files and have them as command items? Instead of fetching score on each query change? The filtering logic is done on the rendering side though in this case. Main process can multithread but rendered cannot?
 * startup is noticeably slow, the installed packages script I think.
 * theme: toggle b/w light and dark mode, and default should be based on system (would require communicating sys theme info from main -> renderer proc)
 * still some apps which should be filtered out, .desktop doesn't necesarrily equate to exec'able or installed?

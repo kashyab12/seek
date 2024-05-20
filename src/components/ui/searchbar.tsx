@@ -24,6 +24,7 @@ export function SearchBar() {
         <CommandInput
             autoFocus={true}
             onValueChange={(searchValue) => handleOnChange(searchValue, [searchQuery, setSearchQuery], setSearchResults)}
-            placeholder="seek" />
+            placeholder="seek"
+            value={searchQuery} />
     )
 }

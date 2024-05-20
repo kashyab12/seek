@@ -5,6 +5,10 @@
 ---
 
 ### todos
+* startup is noticeably slow, the installed packages script I think.
+* theme: toggle b/w light and dark mode, and default should be based on system (would require communicating sys theme info from main -> renderer proc)
+* still some apps which should be filtered out, .desktop doesn't necesarrily equate to exec'able or installed?
+* dpkg is missing .desktop files within the local dir?
 * optimize fuzzy matcher via trying out different scorers
 * local py server running listening to reqs from be?
 * sqlite when things become a pain to store in files?

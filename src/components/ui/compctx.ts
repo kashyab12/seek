@@ -13,7 +13,7 @@ export interface WindowStateCtx {
 export const WindowCtx = createContext<WindowStateCtx>({
     searchResultCtx: {
         searchResults: [],
-        setSearchResults: () => { }
+        setSearchResults: () => undefined
     }
 })
 

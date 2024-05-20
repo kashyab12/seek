@@ -2,7 +2,8 @@ import { useState } from "react";
 import { SearchBar } from "@/components/ui/searchbar";
 import { WindowCtx, WindowStateCtx } from "@/components/ui/compctx";
 import { SearchResults } from "@/components/ui/searchresults";
-import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator } from "@/components/ui/command"
+import { Command, CommandList, CommandGroup } from "@/components/ui/command"
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 export type ResultsState = [string[][], React.Dispatch<React.SetStateAction<string[][]>>]
 
@@ -15,19 +16,20 @@ export function SearchWindow() {
         }
     }
     return (
-        <WindowCtx.Provider value={windowStateCtx}>
-            <Command loop={true}>
-                <SearchBar />
-                <CommandList>
-                    <CommandEmpty></CommandEmpty>
-                    {
-                        searchResults.length > 1 &&
-                        <CommandGroup heading="Apps">
-                            <SearchResults />
-                        </CommandGroup>
-                    }
-                </CommandList>
-            </Command>
-        </WindowCtx.Provider >
+        <ThemeProvider defaultTheme="dark">
+            <WindowCtx.Provider value={windowStateCtx}>
+                <Command loop={true}>
+                    <SearchBar />
+                    <CommandList>
+                        {
+                            searchResults.length > 1 &&
+                            <CommandGroup heading="Apps">
+                                <SearchResults />
+                            </CommandGroup>
+                        }
+                    </CommandList>
+                </Command>
+            </WindowCtx.Provider >
+        </ThemeProvider>
     )
 }

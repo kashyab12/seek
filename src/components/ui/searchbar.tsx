@@ -4,7 +4,7 @@ import { CommandInput } from "@/components/ui/command"
 
 export type QueryState = [string, React.Dispatch<React.SetStateAction<string>>]
 
-const handleOnChange = async (searchValue: string, [searchQuery, setSearchQuery]: QueryState, setSearchResults: React.Dispatch<React.SetStateAction<string[][]>>) => {
+const handleOnChange = async (searchValue: string, [, setSearchQuery]: QueryState, setSearchResults: React.Dispatch<React.SetStateAction<string[][]>>) => {
     setSearchQuery(searchValue)
     if (searchValue) {
         const searchResult = await window.electronHandler.toSeek(searchValue)
@@ -17,7 +17,7 @@ const handleOnChange = async (searchValue: string, [searchQuery, setSearchQuery]
 export function SearchBar() {
     const [searchQuery, setSearchQuery] = useState<string>("")
     const {
-        searchResultCtx: { searchResults, setSearchResults }
+        searchResultCtx: { setSearchResults }
     } = useContext(WindowCtx)
 
     return (

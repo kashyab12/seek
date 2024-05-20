@@ -11,7 +11,7 @@ const handleOnSelect = async (searchResult: string) => {
 
 export function SearchResults() {
     const {
-        searchResultCtx: { searchResults, setSearchResults },
+        searchResultCtx: { searchResults },
     } = useContext(WindowCtx)
 
     const resultFocusArr: Array<React.MutableRefObject<HTMLButtonElement>> = []
@@ -20,7 +20,7 @@ export function SearchResults() {
     }
 
     return (
-        searchResults.map((searchResultEntry: string[], index: number) => {
+        searchResults.map((searchResultEntry: string[]) => {
             const [searchResult, , appIcon] = searchResultEntry
             return (
                 <CommandItem

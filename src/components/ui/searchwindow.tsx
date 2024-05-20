@@ -22,10 +22,10 @@ export function SearchWindow() {
     }
     return (
         <WindowCtx.Provider value={windowStateCtx}>
-            <Command>
+            <Command loop={true}>
                 <SearchBar/>
                 <CommandList>
-                    <CommandEmpty>No results found.</CommandEmpty>
+                    <CommandEmpty></CommandEmpty>
                     {
                         searchResults.length > 1 &&
                         <CommandGroup heading="Apps">

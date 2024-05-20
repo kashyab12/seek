@@ -75,7 +75,7 @@ const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: stri
       const imgData = await fs.readFile(imgPath)
       const b64Data = Buffer.from(imgData).toString('base64')
       const imgExt = imgPath.split(".").at(-1)
-      const mimeType = imgExt === "svg" ? "svg+xml": imgExt
+      const mimeType = imgExt === "svg" ? "svg+xml" : imgExt
       const b64Icon = `data:image/${mimeType};base64,${b64Data}`
       resolveResult.push([appName, simScore, b64Icon])
     } else {

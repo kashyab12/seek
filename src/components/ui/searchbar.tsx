@@ -17,7 +17,6 @@ import {
 export type QueryState = [string, React.Dispatch<React.SetStateAction<string>>]
 
 const handleOnChange = async (searchValue: string, [searchQuery, setSearchQuery]: QueryState, setSearchResults: React.Dispatch<React.SetStateAction<string[][]>>) => {
-    debugger;
     setSearchQuery(searchValue)
     if (searchValue) {
         const searchResult = await window.electronHandler.toSeek(searchValue)
@@ -37,32 +36,15 @@ const handleOnKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>, 
 
 
 export function SearchBar() {
-    // const barFocus: React.MutableRefObject<HTMLInputElement> = useRef()
     const [searchQuery, setSearchQuery] = useState<string>("")
     const {
         searchResultCtx: { searchResults, setSearchResults },
         focusCtx: { windowFocus, setWindowFocus }
     } = useContext(WindowCtx)
 
-    // useEffect(() => {
-    //     if (windowFocus == -1) {
-    //         barFocus.current.focus()
-    //     }
-    // }, [windowFocus])
-
-    // return (
-    //     <Textarea
-    //         ref={barFocus}
-    //         autoFocus={windowFocus === -1}
-    //         placeholder="Search for apps"
-    //         onChange={(event) => handleOnChange(event, [searchQuery, setSearchQuery], setSearchResults)}
-    //         onKeyDown={(event) => handleOnKeyDown(event, searchResults, [windowFocus, setWindowFocus])}
-    //         value={searchQuery}
-    //         rows={1} />
-    // )
     return (
         <CommandInput 
-        // ref={barFocus}
+        autoFocus={true}
         onValueChange={(searchValue) => handleOnChange(searchValue, [searchQuery, setSearchQuery], setSearchResults)}
         placeholder="seek" />
     )

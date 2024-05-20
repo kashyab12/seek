@@ -37,7 +37,7 @@ const handleOnKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>, 
 
 
 export function SearchBar() {
-    const barFocus: React.MutableRefObject<HTMLInputElement> = useRef()
+    // const barFocus: React.MutableRefObject<HTMLInputElement> = useRef()
     const [searchQuery, setSearchQuery] = useState<string>("")
     const {
         searchResultCtx: { searchResults, setSearchResults },
@@ -62,7 +62,7 @@ export function SearchBar() {
     // )
     return (
         <CommandInput 
-        ref={barFocus}
+        // ref={barFocus}
         onValueChange={(searchValue) => handleOnChange(searchValue, [searchQuery, setSearchQuery], setSearchResults)}
         placeholder="seek" />
     )

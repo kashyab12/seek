@@ -1,7 +1,7 @@
-import { useContext, useEffect, useRef } from "react";
-import { WindowCtx, Focus, FocusStateCtx } from "@/components/ui/compctx";
+import { useContext, useRef } from "react";
+import { WindowCtx } from "@/components/ui/compctx";
 import { AppWindow } from "lucide-react"
-import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator } from "@/components/ui/command"
+import { CommandItem } from "@/components/ui/command"
 
 const MAX_SEARCH_RESULT = 5
 const handleOnSelect = async (searchResult: string) => {
@@ -12,7 +12,6 @@ const handleOnSelect = async (searchResult: string) => {
 export function SearchResults() {
     const {
         searchResultCtx: { searchResults, setSearchResults },
-        focusCtx: { windowFocus, setWindowFocus }
     } = useContext(WindowCtx)
 
     const resultFocusArr: Array<React.MutableRefObject<HTMLButtonElement>> = []
@@ -28,7 +27,7 @@ export function SearchResults() {
                     key={searchResult}
                     onSelect={(searchVal) => handleOnSelect(searchVal)}
                     value={searchResult}>
-                    {appIcon? <img src={appIcon} width={32} height={32} className="m-1.5" />: <AppWindow width={32} height={32} className="m-1.5"/>}
+                    {appIcon ? <img src={appIcon} width={32} height={32} className="m-1.5" /> : <AppWindow width={32} height={32} className="m-1.5" />}
                     {searchResult}
                 </CommandItem>
             )

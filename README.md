@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="res/seek-demo-may18.gif" alt="seek" border="10" width="75%">
+    <img src="res/seek-demo-may20.gif" alt="seek" width="75%">
 </p>
 
 ---

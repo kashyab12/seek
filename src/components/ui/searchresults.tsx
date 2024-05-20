@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import { WindowCtx, Focus, FocusStateCtx } from "@/components/ui/compctx";
 import { Button } from "@/components/ui/button";
+import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator } from "@/components/ui/command"
 
 const MAX_SEARCH_RESULT = 5
 const handleOnFocus = (event: React.FocusEvent<HTMLButtonElement>, windowFocus: Focus) => {
@@ -45,17 +46,21 @@ export function SearchResults() {
         searchResults.map((searchResultEntry: string[], index: number) => {
             const [searchResult, simScore, appIcon] = searchResultEntry
             return (
-                <Button
-                    ref={resultFocusArr[index]}
-                    key={searchResult}
-                    onClick={(event) => handleOnClick(event, searchResult)}
-                    onFocus={(event) => handleOnFocus(event, windowFocus)}
-                    onKeyDown={(event) => handleKeyDown(event, {windowFocus, setWindowFocus})}
-                    size="sm">
-                    {appIcon && <img src={appIcon} width={32} height={32} />}
-                    {`${searchResult} - ${simScore}`}
-                </Button>
+                <CommandItem key={searchResult}>{searchResult}</CommandItem>
             )
+            // return (
+            //     <Button
+            //         ref={resultFocusArr[index]}
+            //         key={searchResult}
+            //         onClick={(event) => handleOnClick(event, searchResult)}
+            //         onFocus={(event) => handleOnFocus(event, windowFocus)}
+            //         onKeyDown={(event) => handleKeyDown(event, { windowFocus, setWindowFocus })}
+            //         size="sm">
+            //         {appIcon && <img src={appIcon} width={32} height={32} />}
+            //         {`${searchResult} - ${simScore}`}
+            //     </Button>
+            // )
         })
     )
+
 }

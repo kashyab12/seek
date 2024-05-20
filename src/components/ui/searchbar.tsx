@@ -2,13 +2,25 @@ import { Textarea } from "@/components/ui/textarea"
 import { useContext, useEffect, useRef, useState } from "react"
 import { WindowCtx } from "@/components/ui/compctx"
 import { FocusState } from "@/components/ui/searchwindow"
+import {
+    Command,
+    CommandDialog,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+    CommandSeparator,
+    CommandShortcut,
+} from "@/components/ui/command"
 
 export type QueryState = [string, React.Dispatch<React.SetStateAction<string>>]
 
-const handleOnChange = async (event: React.ChangeEvent<HTMLTextAreaElement>, [searchQuery, setSearchQuery]: QueryState, setSearchResults: React.Dispatch<React.SetStateAction<string[][]>>) => {
-    setSearchQuery(event.target.value)
-    if (event.target.value) {
-        const searchResult = await window.electronHandler.toSeek(searchQuery)
+const handleOnChange = async (searchValue: string, [searchQuery, setSearchQuery]: QueryState, setSearchResults: React.Dispatch<React.SetStateAction<string[][]>>) => {
+    debugger;
+    setSearchQuery(searchValue)
+    if (searchValue) {
+        const searchResult = await window.electronHandler.toSeek(searchValue)
         setSearchResults(searchResult)
     } else {
         setSearchResults([])
@@ -25,27 +37,33 @@ const handleOnKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>, 
 
 
 export function SearchBar() {
-    const barFocus: React.MutableRefObject<HTMLTextAreaElement> = useRef()
+    const barFocus: React.MutableRefObject<HTMLInputElement> = useRef()
     const [searchQuery, setSearchQuery] = useState<string>("")
     const {
         searchResultCtx: { searchResults, setSearchResults },
         focusCtx: { windowFocus, setWindowFocus }
     } = useContext(WindowCtx)
 
-    useEffect(() =>{
-        if (windowFocus == -1) {
-            barFocus.current.focus()
-        }
-    }, [windowFocus])
+    // useEffect(() => {
+    //     if (windowFocus == -1) {
+    //         barFocus.current.focus()
+    //     }
+    // }, [windowFocus])
 
+    // return (
+    //     <Textarea
+    //         ref={barFocus}
+    //         autoFocus={windowFocus === -1}
+    //         placeholder="Search for apps"
+    //         onChange={(event) => handleOnChange(event, [searchQuery, setSearchQuery], setSearchResults)}
+    //         onKeyDown={(event) => handleOnKeyDown(event, searchResults, [windowFocus, setWindowFocus])}
+    //         value={searchQuery}
+    //         rows={1} />
+    // )
     return (
-        <Textarea
-            ref={barFocus}
-            autoFocus={windowFocus === -1}
-            placeholder="Search for apps"
-            onChange={(event) => handleOnChange(event, [searchQuery, setSearchQuery], setSearchResults)}
-            onKeyDown={(event) => handleOnKeyDown(event, searchResults, [windowFocus, setWindowFocus])}
-            value={searchQuery}
-            rows={1} />
+        <CommandInput 
+        ref={barFocus}
+        onValueChange={(searchValue) => handleOnChange(searchValue, [searchQuery, setSearchQuery], setSearchResults)}
+        placeholder="seek" />
     )
 }

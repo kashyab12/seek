@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SearchBar } from "@/components/ui/searchbar";
 import { WindowCtx, WindowStateCtx, Focus } from "@/components/ui/compctx";
 import { SearchResults } from "@/components/ui/searchresults";
+import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator } from "@/components/ui/command"
 
 export type ResultsState = [string[][], React.Dispatch<React.SetStateAction<string[][]>>]
 export type FocusState = [Focus, React.Dispatch<React.SetStateAction<Focus>>]
@@ -21,13 +22,18 @@ export function SearchWindow() {
     }
     return (
         <WindowCtx.Provider value={windowStateCtx}>
-            <div className="grid w-full gap-2">
-                <SearchBar />
-                {
-                    searchResults.length > 1 &&
-                    <SearchResults />
-                }
-            </div>
+            <Command>
+                <SearchBar/>
+                <CommandList>
+                    <CommandEmpty>No results found.</CommandEmpty>
+                    {
+                        searchResults.length > 1 &&
+                        <CommandGroup heading="Apps">
+                            <SearchResults />
+                        </CommandGroup>
+                    }
+                </CommandList>
+            </Command>
         </WindowCtx.Provider >
     )
 }

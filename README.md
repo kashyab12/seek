@@ -15,6 +15,7 @@ $ python -r requirements.txt && npm run start
 ```
 
 ### todos
+* ~~how do I bundle the py scripts with electron? Does this work with auto-updating?~~ Need to get rid of python since the usage is trivial. On looking into the bundling process, integrating python would require including py binaries with the app leading to a fat deb file.
 * file searching! next most imp item.
 * for queries which don't map to app or file -> open in default browser?
 * other interesting queries?
@@ -26,7 +27,6 @@ $ python -r requirements.txt && npm run start
 * optimize fuzzy matcher via trying out different scorers
 * dameon to orchestrate python based reqs via main process.
 * sqlite when things become a pain to store in files?
-* how do I bundle the py scripts with electron? Does this work with auto-updating?
 * still seeing a open '60' error in toSeek, main process. Not handling a promise correctly?
 * ~~store .desktop info when checking /usr/share/apps folder and cache the info rather than fetching each time~~
 * ~~how to fetch icons cleanly? there must be some ds storing all the app icon info on the system.~~

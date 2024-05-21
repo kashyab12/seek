@@ -2,7 +2,7 @@
   "name": "seek",
   "productName": "seek",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "spotlight search for linux",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -37,7 +37,7 @@
   },
   "keywords": [],
   "author": {
-    "name": "kashyaba",
+    "name": "kashyabja",
     "email": "iamkashyab@gmail.com"
   },
   "license": "MIT",

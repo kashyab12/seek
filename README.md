@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="res/seek-demo-may20.gif" alt="seek" width="75%">
+    <img src="res/seek-demo-may21.gif" alt="seek" width="75%">
 </p>
 
 ---
@@ -7,12 +7,11 @@
 ### setup
 Please ensure you have [nodejs intalled](https://nodejs.org/en/download/package-manager), [nvm](https://github.com/nvm-sh/nvm) is a popular option to manage multiple nodejs versions. Once you have cloned the project, `cd` into the project directory and install the dependencies:
 ```bash
-npm install
+$ npm install
 ```
 Aside from nodejs, the main process leverages python for certain aspects (such as fetching all the installed applications). Please ensure you have [3.11+ installed](https://www.python.org/downloads/). Similar to nvm for node [pyenv](https://github.com/pyenv/pyenv) is a great solution for managing multiple python versions. Once you have python installed, execute the following to install the python dependencies and run the project:
 ```bash
-python -r requirements.txt
-npm run start
+$ python -r requirements.txt && npm run start
 ```
 
 ### todos

@@ -15,12 +15,11 @@ $ python -r requirements.txt && npm run start
 ```
 
 ### todos
-* ~~how do I bundle the py scripts with electron? Does this work with auto-updating?~~ Need to get rid of python since the usage is trivial. On looking into the bundling process, integrating python would require including py binaries with the app leading to a fat deb file.
 * file searching! next most imp item.
 * for queries which don't map to app or file -> open in default browser?
 * other interesting queries?
 * just return all the installed files and have them as command items? Instead of fetching score on each query change? The filtering logic is done on the rendering side though in this case. Main process can multithread but rendered cannot?
-* startup is noticeably slow, the installed packages script I think.
+* startup is noticeably slow, the installed packages portion. Make it faster using worker threads? Also does it need recomputing on every startup?
 * theme: toggle b/w light and dark mode, and default should be based on system (would require communicating sys theme info from main -> renderer proc)
 * still some apps which should be filtered out, .desktop doesn't necesarrily equate to exec'able or installed?
 * dpkg is missing .desktop files within the local dir?
@@ -34,3 +33,4 @@ $ python -r requirements.txt && npm run start
 * ~~navigate to results and set focus using arrow keys or nums?~~
 * ~~use the command shadcn component~~
 * ~~make sure the searchresult key is not arr index.~~
+* ~~Need to get rid of python since the usage is trivial. On looking into the bundling process, integrating python would require including py binaries with the app leading to a fat deb file.~~

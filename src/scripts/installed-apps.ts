@@ -13,6 +13,7 @@ export interface InstalledAppsInfo {
 
 export type AppInfo = Record<string, InstalledAppsInfo>
 
+// todo: use worker threads to make concurrent.
 async function findAppIcon(desktopPath: string) {
     const iconsDir = "/usr/share/icons"
     const iconPathCmd = `grep Icon ${desktopPath}`
@@ -79,6 +80,7 @@ export async function generateInstalledAppsInfo() {
             const appIcon = await findAppIcon(desktopPath)
             const iconPath = appIcon ? appIcon.split("\n")[0] : ""
             let b64Icon = ""
+            // todo: make concurrent via worker threads
             if (iconPath) {
                 const imgData = await fs.readFile(iconPath)
                 const b64Data = Buffer.from(imgData).toString('base64')

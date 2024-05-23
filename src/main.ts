@@ -1,8 +1,8 @@
 import { app, BrowserWindow, nativeTheme, ipcMain, nativeImage, globalShortcut, shell } from 'electron';
 import { spawn } from "child_process"
-import { promises as fs } from 'fs';
 import path from 'path';
-import { InstalledAppsInfo, generateInstalledAppsInfo, AppInfo } from '@/scripts/installed-apps';
+import { generateInstalledAppsInfo, AppInfo } from '@/scripts/installed-apps';
+import { openApp } from '@/scripts/open-app';
 
 const appWindows: BrowserWindow[] = []
 // todo: store in local storage?
@@ -39,55 +39,23 @@ const createWindow = (): BrowserWindow => {
 };
 
 const toSeekHandler = async (_: Electron.IpcMainInvokeEvent, [searchQuery]: string) => {
-  // todo: use safeStorage to encrypt/decrypt
-  const child = spawn("python", [path.join(app.getAppPath(), "scripts", "scorer.py"), searchQuery, `${app.getPath('appData')}/installed_apps.json`])
-  child.stdout.setEncoding("utf8")
-  child.stderr.setEncoding("utf8")
-  // todo: not sure these listeners are correct, need to correct this to correctly handle this promise
-  let searchResults = ""
-  for await (const chunk of child.stdout) {
-    searchResults += chunk
-  }
-  let searchError = ""
-  for await (const chunk of child.stderr) {
-    searchError += chunk
-  }
-  if (searchError && !searchError.includes("score 0")) {
-    throw new Error(`subprocess exited with error ${searchError}`)
-  }
   const resolveResult: Array<[string, string, string]> = []
-  for (const result of searchResults.split("\n")) {
-    if (!result) {
-      continue
-    }
-    const [appName, simScore, imgPath] = result.split(/[\s:;]+/)
-    if (imgPath) {
-      const imgData = await fs.readFile(imgPath)
-      const b64Data = Buffer.from(imgData).toString('base64')
-      const imgExt = imgPath.split(".").at(-1)
-      const mimeType = imgExt === "svg" ? "svg+xml" : imgExt
-      const b64Icon = `data:image/${mimeType};base64,${b64Data}`
-      resolveResult.push([appName, simScore, b64Icon])
-    } else {
-      resolveResult.push([appName, simScore, ""])
-    }
+  for (const appName in appsInfo) {
+    const { b64Icon } = appsInfo[appName]
+    resolveResult.push([appName, "1", b64Icon])
   }
   return resolveResult
 }
 
 const openAppHandler = async (_: Electron.IpcMainInvokeEvent, [searchResult]: string) => {
-  let searchError = ""
-  // todo: use safeStorage to encrypt/decrypt
-  const child = spawn("python", [path.join(app.getAppPath(), "scripts", "open_app.py"), searchResult, `${app.getPath("appData")}/installed_apps.json`])
-  child.stderr.setEncoding("utf8")
-  for await (const chunk of child.stderr) {
-    searchError += chunk
-  }
-  if (searchError) {
-    shell.openExternal(`file://${searchResult}`)
+  try {
+    const openAppOut = await openApp(appsInfo, searchResult)
+    console.log(openAppOut)
+    return true
+  } catch (openAppError) {
+    console.log(openAppError)
     return false
   }
-  return true
 }
 
 const regGlobKeybinds = () => {

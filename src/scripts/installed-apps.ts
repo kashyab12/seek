@@ -63,7 +63,7 @@ async function findAppIcon(desktopPath: string, desktopFile: DesktopFile, electr
         } else throw new EvalError('could not find any icon')
         const { stdout: getAppIconPathStdout, stderr: getAppIconPathStderr } = await execAsync(getAppIconPathCmd)
         if (getAppIconPathStderr) console.log(getAppIconPathStderr)
-        return getAppIconPathStdout.replace("\n", "").trim()
+        return getAppIconPathStdout.split("\n")[0]
     } catch (getAppIconPathError) {
         console.log(getAppIconPathError)
         return ""
@@ -71,23 +71,28 @@ async function findAppIcon(desktopPath: string, desktopFile: DesktopFile, electr
 }
 
 async function imgToB64(imagePath: string) {
-    if (!imagePath) return ""
-    const imgData = await fs.readFile(imagePath)
-    const b64Data = Buffer.from(imgData).toString('base64')
-    const imgExt = imagePath.split(".").at(-1)
-    const mimeType = imgExt === "svg" ? "svg+xml" : imgExt
-    return `data:image/${mimeType};base64,${b64Data}`
+    try {
+        if (!imagePath) return ""
+        const imgData = await fs.readFile(imagePath)
+        const b64Data = Buffer.from(imgData).toString('base64')
+        const imgExt = imagePath.split(".").at(-1)
+        const mimeType = imgExt === "svg" ? "svg+xml" : imgExt
+        return `data:image/${mimeType};base64,${b64Data}`
+    } catch (convertError) {
+        console.error(convertError)
+        return ""
+    }
 }
 
 async function getInstalledApps(electronAppInfo: App) {
     try {
         // sifting through diff locations where .desktop files would exist
         const validPaths = [DesktopFilePaths.AppsUsrShare, `${electronAppInfo.getPath("home")}${DesktopFilePaths.AppsLocalShare}`, DesktopFilePaths.AppsSnap, DesktopFilePaths.AppsFlatpak]
-        const findDesktopFilesCmd = `locate "*.desktop"`
+        const findDesktopFilesCmd = 'locate "*.desktop"'
         const { stdout: findDesktopFilesStdout, stderr: findDesktopFilesStderr } = await execAsync(findDesktopFilesCmd)
         if (findDesktopFilesStderr) console.log(findDesktopFilesStderr)
         return findDesktopFilesStdout.split("\n").filter(desktopPath => {
-            validPaths.some(validPath => desktopPath.includes(validPath))
+            return validPaths.some(validPath => desktopPath.includes(validPath))
         })
     } catch (findDesktopFilesError) {
         console.log(findDesktopFilesError)
@@ -104,9 +109,9 @@ async function desktopFileParser(desktopFilePath: string) {
     }
     try {
         const unstructDesktop: string = await fs.readFile(desktopFilePath, { encoding: 'utf-8' })
-        const props: string[] = unstructDesktop.split('\n').filter(line => line.trim() !== '' && !line.startsWith("#"));
+        const props: string[] = unstructDesktop.split('\n').filter(line => line.trim() !== '' && !line.startsWith("#") && !line.startsWith("["));
         for (const desktopProp of props) {
-            const [desktopKey, desktopValue] = desktopProp.split("=", 1)
+            const [desktopKey, desktopValue] = desktopProp.split("=", 2)
             switch (desktopKey.trim()) {
                 case DesktopFileProps.Name:
                     desktopFile.name = desktopValue.trim()

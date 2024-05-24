@@ -103,7 +103,7 @@ app.on('ready', async () => {
   appWindows.forEach(window => {
     window.hide()
   })
-  appsInfo = await generateInstalledAppsInfo()
+  appsInfo = await generateInstalledAppsInfo(app)
   regGlobKeybinds()
   regWindowEvents()
 });

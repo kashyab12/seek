@@ -83,7 +83,7 @@ const regWindowEvents = () => {
 const setupTray = () => {
   tray = new Tray(`${app.getAppPath()}/images/icon.png`)
   const contextMenu = Menu.buildFromTemplate([
-    {label: 'Exit', type: 'normal', click: () => app.quit()}
+    { label: 'Exit', type: 'normal', click: () => app.quit() }
   ])
   tray.setContextMenu(contextMenu)
 }
@@ -98,12 +98,12 @@ ipcMain.handle('dark-mode:system', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  setupTray()
   appWindows.push(createWindow())
   appWindows.forEach(window => {
     window.hide()
   })
   appsInfo = await generateInstalledAppsInfo(app)
+  setupTray()
   regGlobKeybinds()
   regWindowEvents()
 });

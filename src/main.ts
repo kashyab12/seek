@@ -1,5 +1,4 @@
-import { app, BrowserWindow, nativeTheme, ipcMain, nativeImage, globalShortcut, shell } from 'electron';
-import { spawn } from "child_process"
+import { app, BrowserWindow, nativeTheme, ipcMain, globalShortcut, Tray, Menu } from 'electron';
 import path from 'path';
 import { generateInstalledAppsInfo, AppInfo } from '@/scripts/installed-apps';
 import { openApp } from '@/scripts/open-app';
@@ -7,6 +6,7 @@ import { openApp } from '@/scripts/open-app';
 const appWindows: BrowserWindow[] = []
 // todo: store in local storage?
 let appsInfo: AppInfo = {}
+let tray: Tray;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -80,6 +80,14 @@ const regWindowEvents = () => {
   })
 }
 
+const setupTray = () => {
+  tray = new Tray(`${app.getAppPath()}/images/icon.png`)
+  const contextMenu = Menu.buildFromTemplate([
+    {label: 'Exit', type: 'normal', click: () => app.quit()}
+  ])
+  tray.setContextMenu(contextMenu)
+}
+
 ipcMain.handle("toSeek", toSeekHandler)
 ipcMain.handle("openApp", openAppHandler)
 ipcMain.handle('dark-mode:system', () => {
@@ -90,6 +98,7 @@ ipcMain.handle('dark-mode:system', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
+  setupTray()
   appWindows.push(createWindow())
   appWindows.forEach(window => {
     window.hide()

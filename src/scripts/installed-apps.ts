@@ -5,13 +5,6 @@ import { App } from "electron";
 
 const execAsync = promisify(exec)
 
-export interface InstalledAppsInfo {
-    desktopPath: string;
-    iconPath: string;
-    b64Icon: string;
-    execCmd: string
-}
-
 const enum DesktopFilePaths {
     AppsUsrShare = "/usr/share/applications",
     IconsUsrShare = "/usr/share/icons",
@@ -43,6 +36,13 @@ export interface DesktopFile {
     icon: string;
     exec: string;
     type: string;
+}
+
+export interface InstalledAppsInfo {
+    desktopPath: string;
+    iconPath: string;
+    b64Icon: string;
+    execCmd: string
 }
 
 export type AppInfo = Record<string, InstalledAppsInfo>

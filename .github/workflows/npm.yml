@@ -10,26 +10,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
     - uses: actions/checkout@v4
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: use-nodejs-20
+      uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Build
-      run: |
-        npm install
-        npm run make
-    
-    # Upload the build output as an artifact
-    - name: Output
-      uses: actions/upload-artifact@v3
+        node-version: '20.x'
+        cache: 'npm'
+    - name: install-deps
+      run: npm install
+    - name: build-deb-rpm
+      run: npm run make
+    - name: upload-artifact
+      uses: actions/upload-artifact@v4
       with:
-        name: build-output  # Name of the artifact
+        name: deb-rpm-builds     # Name of the artifact
         path: out/make/        # Path to the build output directory

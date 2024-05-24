@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="res/seek-demo-may22.gif" alt="seek" width="75%">
+    <img src="res/seek-demo-may24.gif" alt="seek" width="75%">
 </p>
 
 ---
@@ -15,7 +15,7 @@ $ npm run start
 ```
 
 ### todos
-* still some apps which should be filtered out, .desktop doesn't necesarrily equate to exec'able or installed? Maybe only use Type=Application stuff? Also filter out the %u and %f exec's? Tricky in cases like libreoffice, but for vscode it is using the url handler case and name. Maybe check NoDesktop and use or don't? 
+* still some apps which should be filtered out, .desktop doesn't necesarrily equate to exec'able or installed? Maybe only use Type=Application stuff? Also filter out the %u and %f exec's? Tricky in cases like libreoffice, but for vscode it is using the url handler case and name. Maybe check NoDesktop and use or don't? Chrome gone now :(
 * file searching! next most imp item.
 * for queries which don't map to app or file -> open in default browser?
 * other interesting queries?

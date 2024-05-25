@@ -28,7 +28,8 @@ const enum DesktopFileProps {
     // keywords?
     Comment = "Comment",
     // todo: keyword for search
-    GenericName = "GenericName"
+    GenericName = "GenericName",
+    NoDisplay = "NoDisplay"
 }
 
 export interface DesktopFile {
@@ -36,6 +37,7 @@ export interface DesktopFile {
     icon: string;
     exec: string;
     type: string;
+    noDisplay: boolean
 }
 
 export interface InstalledAppsInfo {
@@ -105,7 +107,8 @@ async function desktopFileParser(desktopFilePath: string) {
         name: "",
         icon: "",
         exec: "",
-        type: ""
+        type: "",
+        noDisplay: false
     }
     try {
         const unstructDesktop: string = await fs.readFile(desktopFilePath, { encoding: 'utf-8' })
@@ -114,16 +117,19 @@ async function desktopFileParser(desktopFilePath: string) {
             const [desktopKey, desktopValue] = desktopProp.split("=", 2)
             switch (desktopKey.trim()) {
                 case DesktopFileProps.Name:
-                    desktopFile.name = desktopValue.trim()
+                    if (!desktopFile.name) desktopFile.name = desktopValue.trim()
                     break
                 case DesktopFileProps.Icon:
-                    desktopFile.icon = desktopValue.trim()
+                    if (!desktopFile.icon) desktopFile.icon = desktopValue.trim()
                     break
                 case DesktopFileProps.Exec:
-                    desktopFile.exec = desktopValue.trim()
+                    if (desktopFile.exec) desktopFile.exec = desktopValue.trim()
                     break
                 case DesktopFileProps.Type:
                     desktopFile.type = desktopValue.trim()
+                    break
+                case DesktopFileProps.NoDisplay:
+                    desktopFile.noDisplay = Boolean(desktopValue.trim())
                     break
             }
         }
@@ -139,6 +145,7 @@ export async function generateInstalledAppsInfo(electronAppInfo: App) {
     // todo: make concurrent via worker threads
     for (const desktopPath of installedApps) {
         const desktopFile = await desktopFileParser(desktopPath)
+        if (desktopFile.noDisplay || desktopFile.type.toLowerCase() != 'application') continue
         const iconPath = await findAppIcon(desktopPath, desktopFile, electronAppInfo)
         const b64Icon = await imgToB64(iconPath)
         appInfo[desktopFile.name] = {

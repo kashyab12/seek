@@ -13,7 +13,7 @@ Once you've installed the dependencies execute the following to run the project:
 ```bash
 $ npm run start
 ```
-Press **CRTL+Enter** to display seek and search. To close the app, open the tray menu (located on the top right corner) and click Exit.
+Press **ctrl+enter** to display seek and search. To close the app, open the tray menu (located on the top right corner) and click Exit.
 
 ## Todos
 * startup is noticeably slow, the installed packages portion. Make it faster using worker threads? Also does it need recomputing on every startup? Save the struct info and when running reference it and use the info if it already exists. If it's a new app then compute and add it to the file/db? Revalidation needs to occur at some point though?

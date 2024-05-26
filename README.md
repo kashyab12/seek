@@ -4,7 +4,7 @@
 
 ---
 
-### setup
+## Setup
 Please ensure you have [nodejs intalled](https://nodejs.org/en/download/package-manager). [nvm](https://github.com/nvm-sh/nvm) is a popular option to manage multiple nodejs versions. Once you have cloned the project, `cd` into the project directory and if you have [nvm](https://github.com/nvm-sh/nvm) installed run `nvm use` to install the identical nodejs version. Once done, install the project  dependencies:
 ```bash
 $ npm install
@@ -13,8 +13,9 @@ Once you've installed the dependencies execute the following to run the project:
 ```bash
 $ npm run start
 ```
+Press **CRTL+Enter** to display seek and search. To close the app, open the tray menu (located on the top right corner) and click Exit.
 
-### todos
+## Todos
 * startup is noticeably slow, the installed packages portion. Make it faster using worker threads? Also does it need recomputing on every startup? Save the struct info and when running reference it and use the info if it already exists. If it's a new app then compute and add it to the file/db? Revalidation needs to occur at some point though?
 * file searching! next most imp item.
 * for queries which don't map to app or file -> open in default browser?

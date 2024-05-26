@@ -98,14 +98,16 @@ ipcMain.handle('dark-mode:system', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  appWindows.push(createWindow())
-  appWindows.forEach(window => {
-    window.hide()
-  })
-  appsInfo = await generateInstalledAppsInfo(app)
-  setupTray()
-  regGlobKeybinds()
-  regWindowEvents()
+  try {
+    appWindows.push(createWindow())
+    appWindows.forEach(window => window.hide())
+    appsInfo = await generateInstalledAppsInfo(app)
+    setupTray()
+    regGlobKeybinds()
+    regWindowEvents()
+  } catch (installedAppError) {
+    console.error(installedAppError)
+  }
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

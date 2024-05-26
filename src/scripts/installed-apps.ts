@@ -64,10 +64,10 @@ async function findAppIcon(desktopPath: string, desktopFile: DesktopFile, electr
             getAppIconPathCmd = `find ${DesktopFilePaths.IconsFlatpak} -name '${desktopFile.icon}.*' -type f`
         } else throw new EvalError('could not find any icon')
         const { stdout: getAppIconPathStdout, stderr: getAppIconPathStderr } = await execAsync(getAppIconPathCmd)
-        if (getAppIconPathStderr) console.log(getAppIconPathStderr)
+        if (getAppIconPathStderr) console.error(getAppIconPathStderr)
         return getAppIconPathStdout.split("\n")[0]
     } catch (getAppIconPathError) {
-        console.log(getAppIconPathError)
+        console.error(getAppIconPathError)
         return ""
     }
 }
@@ -92,12 +92,12 @@ async function getInstalledApps(electronAppInfo: App) {
         const validPaths = [DesktopFilePaths.AppsUsrShare, `${electronAppInfo.getPath("home")}${DesktopFilePaths.AppsLocalShare}`, DesktopFilePaths.AppsSnap, DesktopFilePaths.AppsFlatpak]
         const findDesktopFilesCmd = 'locate "*.desktop"'
         const { stdout: findDesktopFilesStdout, stderr: findDesktopFilesStderr } = await execAsync(findDesktopFilesCmd)
-        if (findDesktopFilesStderr) console.log(findDesktopFilesStderr)
+        if (findDesktopFilesStderr) console.error(findDesktopFilesStderr)
         return findDesktopFilesStdout.split("\n").filter(desktopPath => {
             return validPaths.some(validPath => desktopPath.includes(validPath))
         })
     } catch (findDesktopFilesError) {
-        console.log(findDesktopFilesError)
+        console.error(findDesktopFilesError)
         return []
     }
 }
@@ -145,7 +145,7 @@ export async function generateInstalledAppsInfo(electronAppInfo: App) {
     // todo: make concurrent via worker threads
     for (const desktopPath of installedApps) {
         const desktopFile = await desktopFileParser(desktopPath)
-        if (desktopFile.noDisplay || desktopFile.type.toLowerCase() != 'application') continue
+        if (desktopFile.noDisplay || desktopFile.type.toLowerCase() != 'application' || !desktopFile.name) continue
         const iconPath = await findAppIcon(desktopPath, desktopFile, electronAppInfo)
         const b64Icon = await imgToB64(iconPath)
         appInfo[desktopFile.name] = {

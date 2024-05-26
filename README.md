@@ -2,18 +2,8 @@
     <img src="res/seek-demo-may24.gif" alt="seek" width="75%">
 </p>
 
----
-
-## Setup
-Please ensure you have [nodejs intalled](https://nodejs.org/en/download/package-manager). [nvm](https://github.com/nvm-sh/nvm) is a popular option to manage multiple nodejs versions. Once you have cloned the project, `cd` into the project directory and if you have [nvm](https://github.com/nvm-sh/nvm) installed run `nvm use` to install the identical nodejs version. Once done, install the project  dependencies:
-```bash
-$ npm install
-```
-Once you've installed the dependencies execute the following to run the project:
-```bash
-$ npm run start
-```
-Press **ctrl+enter** to display seek and search. To close the app, open the tray menu (located on the top right corner) and click Exit.
+## Why	
+Spotlight search is one of my favorite features in MacOS. As such, I couldn't find a great alternative in linux and accordingly I decided to build 'seek'. Currently, it supports app search and execution. The keybind to display seek is "ctrl+enter", and the deb+rpm builds can be found [here](https://github.com/kashyab12/seek/releases/tag/v0.1).
 
 ## Todos
 * startup is noticeably slow, the installed packages portion. Make it faster using worker threads? Also does it need recomputing on every startup? Save the struct info and when running reference it and use the info if it already exists. If it's a new app then compute and add it to the file/db? Revalidation needs to occur at some point though?

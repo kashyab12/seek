@@ -1,7 +1,7 @@
 import { exec } from "child_process"
 import { promisify } from "util";
 import { promises as fs } from 'fs';
-import { App } from "electron";
+import type { App } from "electron";
 
 const execAsync = promisify(exec)
 

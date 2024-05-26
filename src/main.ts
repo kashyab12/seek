@@ -18,7 +18,7 @@ const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 800,
-    icon: `${app.getAppPath()}/images/icon.png`,
+    icon: path.join(__dirname, "images/icon.png"),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
@@ -81,7 +81,7 @@ const regWindowEvents = () => {
 }
 
 const setupTray = () => {
-  tray = new Tray(`${app.getAppPath()}/images/icon.png`)
+  tray = new Tray(path.join(__dirname, "images/icon.png"))
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Exit', type: 'normal', click: () => app.quit() }
   ])
@@ -124,5 +124,6 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
+    Menu.setApplicationMenu(null)
   }
 });

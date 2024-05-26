@@ -13,7 +13,7 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({options: {
-    icon: './images/icon.png'
+    icon: 'public/images/icon.png'
   }})],
   plugins: [
     new VitePlugin({

@@ -2,6 +2,7 @@
   "name": "seek",
   "productName": "seek",
   "version": "1.0.0",
+  "icon": "public/images/icon.png",
   "description": "spotlight search for linux",
   "main": ".vite/build/main.js",
   "scripts": {

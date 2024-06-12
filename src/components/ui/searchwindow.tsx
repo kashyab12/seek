@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SearchBar } from "@/components/ui/searchbar";
 import { WindowCtx, WindowStateCtx } from "@/components/ui/compctx";
 import { SearchResults } from "@/components/ui/searchresults";
-import { Command, CommandList, CommandGroup } from "@/components/ui/command"
+import { Command, CommandList, CommandGroup, CommandEmpty } from "@/components/ui/command"
 import { ThemeProvider } from "@/components/ui/theme-provider";
 
 export type ResultsState = [string[][], React.Dispatch<React.SetStateAction<string[][]>>]
@@ -21,6 +21,7 @@ export function SearchWindow() {
                 <Command loop={true}>
                     <SearchBar />
                     <CommandList>
+                        <CommandEmpty>Search for Files</CommandEmpty>
                         {
                             searchResults.length > 1 &&
                             <CommandGroup heading="Apps">

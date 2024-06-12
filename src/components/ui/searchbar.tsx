@@ -15,8 +15,8 @@ const handleOnChange = async (searchValue: string, [, setSearchQuery]: QueryStat
 }
 
 export function SearchBar() {
-    const [searchQuery, setSearchQuery] = useState<string>("")
     const {
+        searchQueryCtx: { searchQuery, setSearchQuery },
         searchResultCtx: { setSearchResults }
     } = useContext(WindowCtx)
 

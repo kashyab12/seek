@@ -27,9 +27,17 @@ export function SearchWindow() {
                 <Command loop={true}>
                     <SearchBar />
                     <CommandList>
-                        <CommandEmpty>
-                            cool
-                        </CommandEmpty>
+                        
+                        {/* 
+                        // File Search Component
+                        {
+                            searchQuery.length > 0 &&
+                            <CommandGroup heading="Files" forceMount={true}>
+                                <CommandItem forceMount={true}>
+                                   
+                                </CommandItem>
+                            </CommandGroup>
+                        } */}
                         {
                             
                             searchResults.length > 1 &&
